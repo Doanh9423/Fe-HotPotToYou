@@ -1,7 +1,9 @@
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
+import IngredientPage from 'src/pages/ingredient';
 import DashboardLayout from 'src/layouts/dashboard';
+import ProductTypesPage from 'src/pages/product-types';
 import AxiosInterceptor from 'src/api/axiosInterceptor';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
@@ -35,6 +37,8 @@ export default function Router() {
             { path: 'user', element: <UserPage /> },
             { path: 'utensil', element: <UtensilPage /> },
             { path: 'products', element: <ProductsPage /> },
+            { path: 'product-types', element: <ProductTypesPage /> },
+            { path: 'ingredient', element: <IngredientPage /> },
             { path: 'blog', element: <BlogPage /> },
           ],
         },

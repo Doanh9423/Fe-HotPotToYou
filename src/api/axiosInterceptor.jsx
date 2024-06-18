@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -28,15 +29,8 @@ const AxiosInterceptor = () => {
     const requestErrorInterceptor = (error) => Promise.reject(error);
 
     /* Response Interceptor */
-    const responseInterceptor = (response) => {
-      /**
-       * Add logic for successful response
-       */
-      // eslint-disable-next-line no-unused-expressions
-      response?.data || {};
-    };
+    const responseInterceptor = (response) => response?.data || {};
 
-    // eslint-disable-next-line consistent-return
     const responseErrorInterceptor = async (error) => {
       /**
        * Add logic for any error from backend
@@ -51,7 +45,7 @@ const AxiosInterceptor = () => {
       if (error.message) {
         return Promise.reject(error.message);
       }
-      Promise.reject(new Error('Có lỗi bất ngờ xảy ra !!!'));
+      return Promise.reject(new Error('Có lỗi bất ngờ xảy ra !!!'));
     };
 
     const interceptorReq = axiosClient.interceptors.request.use(requestInterceptor, requestErrorInterceptor);
