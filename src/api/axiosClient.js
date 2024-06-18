@@ -5,7 +5,7 @@ const axiosClient = axios.create({
   baseURL: VITE_API_BASE_URL,
   headers: {
     'content-type': 'application/json',
-  },
+  }
 });
 
 /* Export */
