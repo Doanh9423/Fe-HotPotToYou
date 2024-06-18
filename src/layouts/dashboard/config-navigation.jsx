@@ -2,9 +2,7 @@ import SvgColor from 'src/components/svg-color';
 
 // ----------------------------------------------------------------------
 
-const icon = (name) => (
-  <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-);
+const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 
 const navConfig = [
   {
@@ -23,6 +21,16 @@ const navConfig = [
     icon: icon('ic_cart'),
   },
   {
+    title: 'product type',
+    path: '/product-types',
+    icon: icon('ic_cart'),
+  },
+  {
+    title: 'ingredient',
+    path: '/ingredient',
+    icon: icon('ic_cart'),
+  },
+  {
     title: 'blog',
     path: '/blog',
     icon: icon('ic_blog'),
@@ -30,6 +38,11 @@ const navConfig = [
   {
     title: 'login',
     path: '/login',
+    icon: icon('ic_lock'),
+  },
+  {
+    title: 'register',
+    path: '/register',
     icon: icon('ic_lock'),
   },
   {

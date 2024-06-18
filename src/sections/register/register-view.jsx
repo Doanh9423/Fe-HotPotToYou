@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -5,8 +6,8 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -22,19 +23,24 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function LoginView() {
+export default function RegisterView() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const loginUser = useAuthStore((state) => state.loginUser);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const registerUser = useAuthStore((state) => state.registerUser);
+
   // main
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: '',
+    confirmPassword: '',
+    gender: 'male',
+    phone: '',
   });
-  const { email, password } = formData;
-
+  const { username, email, password, gender, phone, confirmPassword } = formData;
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -42,12 +48,15 @@ export default function LoginView() {
   const handleClick = async () => {
     try {
       setLoading(true);
-      await loginUser({
+      await registerUser({
+        name: username,
+        phone,
         email,
         password,
+        gender,
       });
 
-      navigate('/');
+      navigate('/login');
     } catch (error) {
       console.error('Đăng ký thất bại:', error);
       // Xử lý lỗi nếu cần
@@ -59,7 +68,25 @@ export default function LoginView() {
   const renderForm = (
     <>
       <Stack spacing={3}>
+        <TextField name="username" label="Name" value={username} onChange={handleChange} />
+
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
+          }}
+        >
+          <TextField name="phone" label="Phone Number" value={phone} onChange={handleChange} />
+          <Select value={gender} id="gender-select" name="gender" onChange={handleChange}>
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="female">Female</MenuItem>
+          </Select>
+        </Box>
+
         <TextField name="email" label="Email address" value={email} onChange={handleChange} />
+
         <TextField
           name="password"
           label="Password"
@@ -76,6 +103,23 @@ export default function LoginView() {
             ),
           }}
         />
+
+        <TextField
+          name="confirmPassword"
+          label="Confirm Password"
+          type={showPassword ? 'text' : 'password'}
+          value={confirmPassword}
+          onChange={handleChange}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
+                  <Iconify icon={showConfirmPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
@@ -84,8 +128,8 @@ export default function LoginView() {
         </Link>
       </Stack>
 
-      <LoadingButton laoding={loading} fullWidth size="large" type="submit" variant="contained" color="inherit" onClick={handleClick}>
-        Login
+      <LoadingButton loading={loading} fullWidth size="large" type="submit" variant="contained" color="inherit" onClick={handleClick}>
+        Register
       </LoadingButton>
     </>
   );
@@ -116,16 +160,16 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to Minimal</Typography>
+          <Typography variant="h4">Sign up to Minimal</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
+            Already have account?
             <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-              Get started
+              Sign in
             </Link>
           </Typography>
 
-          <Stack direction="row" spacing={2}>
+          {/* <Stack direction="row" spacing={2}>
             <Button fullWidth size="large" color="inherit" variant="outlined" sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}>
               <Iconify icon="eva:google-fill" color="#DF3E30" />
             </Button>
@@ -143,7 +187,7 @@ export default function LoginView() {
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               OR
             </Typography>
-          </Divider>
+          </Divider> */}
 
           {renderForm}
         </Card>

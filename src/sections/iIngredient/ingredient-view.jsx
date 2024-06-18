@@ -1,22 +1,21 @@
 /* eslint-disable no-unused-vars */
 import { useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { List, Flex, Form, Input, Modal, Button, Select, ConfigProvider, Typography as TypographyAnt } from 'antd';
+import { Flex, Form, Input, Modal, Table, Button, ConfigProvider, Typography as TypographyAnt } from 'antd';
 
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 
 import useFetchData from 'src/hooks/useFetch';
 
+import { useAppStore } from 'src/stores';
 import axiosClient from 'src/api/axiosClient';
 
-import ProductCard from '../product-card';
-import { useAppStore } from '../../../stores';
-import ProductCartWidget from '../product-cart-widget';
+import ProductCartWidget from '../products/product-cart-widget';
 
 // ----------------------------------------------------------------------
 
-export default function ProductsView() {
+export default function IngredientView() {
   const refetchApp = useAppStore((state) => state.refetchApp);
   const [openFilter, setOpenFilter] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,12 +51,11 @@ export default function ProductsView() {
     }, 500),
     [searchParams, setSearchParams]
   );
-  const [loadingType, errorType, responseType] = useFetchData(() => axiosClient.get(`/api/v1/hotpot-type?pageIndex=1&pageSize=100`));
-  console.log(responseType);
+
   const [loadingCourses, errorCourses, responseCourses] = useFetchData(
     () =>
       axiosClient.get(
-        `/api/v1/hotpot?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
+        `/api/IngredientGroup/ingredient-group?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
           searchParams.get('size') ? Number(searchParams.get('size')) : 4
         }${searchParams.get('query') ? `&search=${searchParams.get('query')}` : ''}`
       ),
@@ -67,7 +65,6 @@ export default function ProductsView() {
   );
   console.log(responseCourses);
   const list = responseCourses?.value ? responseCourses.value : [];
-  const types = responseType?.value ? responseType.value : [];
   console.log(list);
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -80,7 +77,7 @@ export default function ProductsView() {
     console.log('Success:', values);
     try {
       setLoading(true);
-      await axiosClient.post(`/api/v1/hotpot`, values);
+      await axiosClient.post(`/api/IngredientGroup`, values);
       refetchApp();
       createForm.resetFields();
     } catch {
@@ -93,6 +90,38 @@ export default function ProductsView() {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+  const handleDelete = async (id) => {
+    try {
+      //   await courseApi.apiV1KhoaHocIdDelete(id)
+      await axiosClient.delete(`/api/IngredientGroup${id}`);
+      //   notification.info({ message: 'Delete thành công' })
+      refetchApp();
+    } catch (e) {
+      //   notification.error({ message: 'Sorry! Something went wrong. App server error' })
+    }
+  };
+  const columns_courses = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Tên',
+      dataIndex: 'name',
+      key: 'name',
+    },
+
+    {
+      title: '',
+      key: 'actions',
+      render: (_, record) => (
+        <Button danger type="primary" onClick={() => handleDelete(record.id)}>
+          Xóa
+        </Button>
+      ),
+    },
+  ];
   return (
     <ConfigProvider
       theme={{
@@ -103,10 +132,10 @@ export default function ProductsView() {
     >
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Ingredient
         </Typography>
         <Modal
-          title="Thêm lẩu"
+          title="Thêm"
           open={openModal}
           onOk={() => setOpenModal(false)}
           onCancel={() => setOpenModal(false)}
@@ -117,27 +146,6 @@ export default function ProductsView() {
           <Form form={createForm} layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
             <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input your username!' }]}>
               <Input />
-            </Form.Item>
-            <Form.Item label="Size" name="size" rules={[{ required: true, message: 'Please input your size!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Image" name="imageUrl" rules={[{ required: true, message: 'Please input your imageUrl!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Price" name="price" rules={[{ required: true, message: 'Please input your price!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item label="Type" name="typeID" rules={[{ required: true, message: 'Please input your typeID!' }]}>
-              <Select placeholder="Type" allowClear>
-                {types?.map((cl) => (
-                  <Select.Option key={cl?.id} value={cl?.id}>
-                    {cl?.name}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item label="Description" name="description" rules={[{ required: true, message: 'Please input your username!' }]}>
-              <Input.TextArea />
             </Form.Item>
 
             <Form.Item>
@@ -225,11 +233,32 @@ export default function ProductsView() {
             ))}
           </Select> */}
             <Button type="primary" size="large" onClick={() => setOpenModal(true)}>
-              Thêm lẩu
+              Thêm
             </Button>
           </Flex>
         </Flex>
-        <List
+        <Table
+          pagination={{
+            current: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+            position: ['bottomLeft'],
+            pageSize: searchParams.get('size') ? Number(searchParams.get('size')) : 4,
+            total: 5,
+          }}
+          columns={columns_courses}
+          dataSource={list}
+          loading={loadingCourses}
+          onChange={(pagination) => {
+            const queryParams = new URLSearchParams({
+              page: pagination.current.toString(),
+              size: pagination.pageSize.toString(),
+            });
+            if (searchParams.get('query')) {
+              queryParams.set('query', searchParams.get('query'));
+            }
+            setSearchParams(queryParams.toString());
+          }}
+        />
+        {/* <List
           loading={loadingCourses}
           pagination={{
             current: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
@@ -255,7 +284,7 @@ export default function ProductsView() {
               <ProductCard product={item} />
             </List.Item>
           )}
-        />
+        /> */}
         {/* <Grid container spacing={3}>
         {list?.map((product) => (
           <Grid key={product.id} xs={12} sm={6} md={3}>
