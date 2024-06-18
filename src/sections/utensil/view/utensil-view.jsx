@@ -126,9 +126,48 @@ export default function UtensilPage() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Utensils</Typography>
 
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => navigate('/utensils/create')}>
-          New Utensils
-        </Button>
+        {/* <Modal
+          title="Thêm lẩu"
+          open={openModal}
+          onOk={() => setOpenModal(false)}
+          onCancel={() => setOpenModal(false)}
+          width={1000}
+          style={{ top: 20 }}
+          footer={null}
+        >
+          <Form form={createForm} layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+            <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input your username!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Size" name="size" rules={[{ required: true, message: 'Please input your size!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Image" name="imageUrl" rules={[{ required: true, message: 'Please input your imageUrl!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Price" name="price" rules={[{ required: true, message: 'Please input your price!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item label="Type" name="typeID" rules={[{ required: true, message: 'Please input your typeID!' }]}>
+              <Select placeholder="Type" allowClear>
+                {types?.map((cl) => (
+                  <Select.Option key={cl?.id} value={cl?.id}>
+                    {cl?.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="Description" name="description" rules={[{ required: true, message: 'Please input your username!' }]}>
+              <Input.TextArea />
+            </Form.Item>
+
+            <Form.Item>
+              <Button loading={loading} type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal> */}
       </Stack>
 
       <Card>

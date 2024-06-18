@@ -2,7 +2,7 @@ import axiosClient from './axiosClient';
 
 const utensilApi = {
   getAll: (params) => {
-    const url = '/utensil';
+    const url = '/v1/utensil';
     return axiosClient.get(url, {
       params,
       paramsSerializer: {
@@ -22,17 +22,17 @@ const utensilApi = {
   },
   // Nếu api chỉ có truyền mỗi body thì xài api này.
   createUtensil: (payload) => {
-    const url = '/utensil';
+    const url = '/v1/utensil';
     return axiosClient.post(url, payload);
   },
 
   deleteUtensil: (payload) => {
-    const url = `/utensil?id=${payload}`;
+    const url = `/v1/utensil?id=${payload}`;
     return axiosClient.delete(url);
   },
 
   updateUtensil: (payload) => {
-    const url = `/utensil/update`;
+    const url = `/v1/utensil/update`;
     return axiosClient.put(url, payload);
   },
 };

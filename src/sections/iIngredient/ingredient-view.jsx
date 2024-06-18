@@ -55,7 +55,7 @@ export default function IngredientView() {
   const [loadingCourses, errorCourses, responseCourses] = useFetchData(
     () =>
       axiosClient.get(
-        `/api/IngredientGroup/ingredient-group?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
+        `/IngredientGroup/ingredient-group?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
           searchParams.get('size') ? Number(searchParams.get('size')) : 4
         }${searchParams.get('query') ? `&search=${searchParams.get('query')}` : ''}`
       ),
@@ -77,7 +77,7 @@ export default function IngredientView() {
     console.log('Success:', values);
     try {
       setLoading(true);
-      await axiosClient.post(`/api/IngredientGroup`, values);
+      await axiosClient.post(`/IngredientGroup`, values);
       refetchApp();
       createForm.resetFields();
     } catch {
@@ -93,7 +93,7 @@ export default function IngredientView() {
   const handleDelete = async (id) => {
     try {
       //   await courseApi.apiV1KhoaHocIdDelete(id)
-      await axiosClient.delete(`/api/IngredientGroup${id}`);
+      await axiosClient.delete(`/IngredientGroup/${id}`);
       //   notification.info({ message: 'Delete thành công' })
       refetchApp();
     } catch (e) {

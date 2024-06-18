@@ -43,10 +43,6 @@ export default function Router() {
           ],
         },
         {
-          path: 'utensil',
-          children: [{ path: 'create', element: <UtensilCreatePage /> }],
-        },
-        {
           path: 'login',
           element: <LoginPage />,
         },

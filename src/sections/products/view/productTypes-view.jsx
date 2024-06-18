@@ -55,7 +55,7 @@ export default function ProductTypesView() {
   const [loadingCourses, errorCourses, responseCourses] = useFetchData(
     () =>
       axiosClient.get(
-        `/api/v1/hotpot-type?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
+        `/v1/hotpot-type?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
           searchParams.get('size') ? Number(searchParams.get('size')) : 4
         }${searchParams.get('query') ? `&search=${searchParams.get('query')}` : ''}`
       ),
@@ -77,7 +77,7 @@ export default function ProductTypesView() {
     console.log('Success:', values);
     try {
       setLoading(true);
-      await axiosClient.post(`/api/v1/hotpot-type`, values);
+      await axiosClient.post(`/v1/hotpot-type`, values);
       refetchApp();
       createForm.resetFields();
     } catch {
@@ -93,7 +93,7 @@ export default function ProductTypesView() {
   const handleDelete = async (id) => {
     try {
       //   await courseApi.apiV1KhoaHocIdDelete(id)
-      await axiosClient.delete('/api/v1/hotpot-type', { data: id });
+      await axiosClient.delete('/v1/hotpot-type', { data: id });
       //   notification.info({ message: 'Delete thành công' })
       refetchApp();
     } catch (e) {

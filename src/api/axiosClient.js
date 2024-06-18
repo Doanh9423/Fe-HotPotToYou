@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const VITE_API_BASE_URL = 'https://hotpottoyou.azurewebsites.net/api/v1';
+export const VITE_API_BASE_URL = 'https://hotpottoyou.azurewebsites.net/api';
 const axiosClient = axios.create({
   baseURL: VITE_API_BASE_URL,
   headers: {
@@ -12,4 +12,4 @@ const axiosClient = axios.create({
 /* Export */
 export default axiosClient;
 
-// https://localhost:7035/api/v1
+// https://localhost:7035/api

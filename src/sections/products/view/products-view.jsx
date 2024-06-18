@@ -52,12 +52,12 @@ export default function ProductsView() {
     }, 500),
     [searchParams, setSearchParams]
   );
-  const [loadingType, errorType, responseType] = useFetchData(() => axiosClient.get(`/api/v1/hotpot-type?pageIndex=1&pageSize=100`));
+  const [loadingType, errorType, responseType] = useFetchData(() => axiosClient.get(`/v1/hotpot-type?pageIndex=1&pageSize=100`));
   console.log(responseType);
   const [loadingCourses, errorCourses, responseCourses] = useFetchData(
     () =>
       axiosClient.get(
-        `/api/v1/hotpot?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
+        `/v1/hotpot?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
           searchParams.get('size') ? Number(searchParams.get('size')) : 4
         }${searchParams.get('query') ? `&search=${searchParams.get('query')}` : ''}`
       ),
@@ -80,7 +80,7 @@ export default function ProductsView() {
     console.log('Success:', values);
     try {
       setLoading(true);
-      await axiosClient.post(`/api/v1/hotpot`, values);
+      await axiosClient.post(`/v1/hotpot`, values);
       refetchApp();
       createForm.resetFields();
     } catch {
