@@ -33,14 +33,15 @@ export default function RegisterView() {
   // main
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     email: '',
     password: '',
     confirmPassword: '',
     gender: 'male',
+    address: '',
     phone: '',
   });
-  const { username, email, password, gender, phone, confirmPassword } = formData;
+  const { username, email, password, gender, address, phone, confirmPassword } = formData;
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -53,6 +54,7 @@ export default function RegisterView() {
         phone,
         email,
         password,
+        address,
         gender,
       });
 

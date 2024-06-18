@@ -13,6 +13,7 @@ const storeApi = (set) => ({
       const { data } = await loginAPI(payload);
       const { accessToken, refreshToken, userInfo } = data;
       set({ status: 'authorized', accessToken, refreshToken, user: userInfo });
+      console.log(data);
     } catch (error) {
       set({
         status: 'unauthorized',

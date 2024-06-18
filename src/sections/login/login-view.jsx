@@ -84,7 +84,7 @@ export default function LoginView() {
         </Link>
       </Stack>
 
-      <LoadingButton laoding={loading} fullWidth size="large" type="submit" variant="contained" color="inherit" onClick={handleClick}>
+      <LoadingButton loading={loading} fullWidth size="large" type="submit" variant="contained" color="inherit" onClick={handleClick}>
         Login
       </LoadingButton>
     </>

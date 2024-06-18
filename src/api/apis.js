@@ -2,8 +2,8 @@
 import axiosClient from './axiosClient';
 
 const APIs_URL = {
-  LOGIN: '/user/login',
-  REGISTER: '/user',
+  LOGIN: 'user/login',
+  REGISTER: 'api/v1/customer/register',
 };
 
 export const loginAPI = async (data) => axiosClient.post(APIs_URL.LOGIN, data);
