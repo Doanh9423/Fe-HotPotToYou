@@ -10,7 +10,7 @@ export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const UserPage = lazy(() => import('src/pages/user'));
 export const UtensilPage = lazy(() => import('src/pages/utensil'));
-export const UtensilCreatePage = lazy(() => import('src/sections/utensil/create'));
+export const PotPage = lazy(() => import('src/pages/pot'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const RegisterPage = lazy(() => import('src/pages/register'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
@@ -27,7 +27,7 @@ export default function Router() {
         {
           element: (
             <DashboardLayout>
-              <Suspense>
+              <Suspense fallback={<div>Loading...</div>}>
                 <Outlet />
               </Suspense>
             </DashboardLayout>
@@ -36,6 +36,7 @@ export default function Router() {
             { element: <IndexPage />, index: true },
             { path: 'user', element: <UserPage /> },
             { path: 'utensil', element: <UtensilPage /> },
+            { path: 'pot', element: <PotPage /> },
             { path: 'products', element: <ProductsPage /> },
             { path: 'product-types', element: <ProductTypesPage /> },
             { path: 'ingredient', element: <IngredientPage /> },
@@ -44,15 +45,27 @@ export default function Router() {
         },
         {
           path: 'login',
-          element: <LoginPage />,
+          element: (
+            <Suspense fallback={<div>Loading...</div>}>
+              <LoginPage />
+            </Suspense>
+          ),
         },
         {
           path: 'register',
-          element: <RegisterPage />,
+          element: (
+            <Suspense fallback={<div>Loading...</div>}>
+              <RegisterPage />
+            </Suspense>
+          ),
         },
         {
           path: '404',
-          element: <Page404 />,
+          element: (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Page404 />
+            </Suspense>
+          ),
         },
         {
           path: '*',

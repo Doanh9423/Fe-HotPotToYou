@@ -2,11 +2,22 @@
 import axiosClient from './axiosClient';
 
 const APIs_URL = {
-  LOGIN: '/user/login',
+  LOGIN: '/v1/user/login',
   REGISTER: '/v1/customer/register',
 };
 
-export const loginAPI = async (data) => axiosClient.post(APIs_URL.LOGIN, data);
+export const loginAPI = async (data) => {
+  try {
+    console.log('Sending login request with payload:', data); // Debug: Log the payload
+    const response = await axiosClient.post(APIs_URL.LOGIN, data);
+    console.log('Login response:', response); // Debug: Log the response
+    return response;
+  } catch (error) {
+    console.error('Login API error:', error.response || error.message); // Debug: Log the error
+    throw error;
+  }
+};
+
 export const registerAPI = async (data) => axiosClient.post(APIs_URL.REGISTER, data);
 
 export const convertToFormData = (data) => {

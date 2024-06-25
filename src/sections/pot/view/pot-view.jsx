@@ -16,11 +16,11 @@ import axiosClient from 'src/api/axiosClient';
 import Iconify from 'src/components/iconify';
 
 import { useAppStore } from '../../../stores';
-import ProductCartWidget from '../utensil-cart-widget';
+import ProductCartWidget from '../pot-cart-widget';
 
 // ----------------------------------------------------------------------
 
-export default function UtensilView() {
+export default function PotView() {
   const refetchApp = useAppStore((state) => state.refetchApp);
   const [openFilter, setOpenFilter] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,7 +64,7 @@ export default function UtensilView() {
   const [loadingCourses, errorCourses, responseCourses] = useFetchData(
     () =>
       axiosClient.get(
-        `/v1/utensil?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
+        `/v1/pot?pageIndex=${searchParams.get('page') ? Number(searchParams.get('page')) : 1}&pageSize=${
           searchParams.get('size') ? Number(searchParams.get('size')) : 10
         }${searchParams.get('query') ? `&name=${searchParams.get('query')}` : ''}`
       ),
@@ -208,7 +208,7 @@ export default function UtensilView() {
           </Popover>
 
           <Modal
-            title="Edit Utensils"
+            title="Edit Pot"
             open={openUpdate === record.id}
             onOk={() => setOpenUpdate(null)}
             onCancel={() => setOpenUpdate(null)}
@@ -266,10 +266,10 @@ export default function UtensilView() {
     >
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Utensils
+          Pots
         </Typography>
         <Modal
-          title="Add Utensils"
+          title="Add Pot"
           open={openCreate}
           onOk={() => setOpenCreate(false)}
           onCancel={() => setOpenCreate(false)}
@@ -299,7 +299,7 @@ export default function UtensilView() {
                 <Button loading={loading} type="primary" htmlType="submit">
                   Add
                 </Button>
-                <Form.Item name="type" initialValue="utensil" style={{ flex: 1 }} />
+                <Form.Item name="type" initialValue="pot" style={{ flex: 1 }} />
               </div>
             </Form.Item>
           </Form>
@@ -316,7 +316,7 @@ export default function UtensilView() {
               }}
             />
             <Button type="primary" size="large" onClick={() => setOpenCreate(true)}>
-              Add Utensils
+              Add Pots
             </Button>
           </Flex>
         </Flex>
