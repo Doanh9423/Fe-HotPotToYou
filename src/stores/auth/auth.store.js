@@ -31,7 +31,10 @@ const storeApi = (set) => ({
         email: payload.email,
         ...userResponse.value,
       };
-
+      console.log('userResponse', userResponse.value.role);
+      if (userResponse.value.role === 'customer') {
+        throw new Error('Not Allowed');
+      }
       set({ auth: { status: 'authorized', accessToken, refreshToken, user: userInfo } });
     } catch (error) {
       console.error('Login error:', error);

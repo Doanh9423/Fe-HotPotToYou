@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { IngredientView } from 'src/sections/iIngredient';
+import { OrderPendingView } from 'src/sections/order/view';
 
 // ----------------------------------------------------------------------
 
-export default function IngredientPage() {
+export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Ingredients </title>
+        <title> Orders </title>
       </Helmet>
 
-      <IngredientView />
+      <OrderPendingView />
     </>
   );
 }

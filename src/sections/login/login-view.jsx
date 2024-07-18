@@ -47,7 +47,7 @@ export default function LoginView() {
 
       navigate('/');
     } catch (error) {
-      console.error('Đăng ký thất bại:', error);
+      console.error('Đăng Nhập thất bại:', error);
       // Xử lý lỗi nếu cần
     } finally {
       setLoading(false);

@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { IngredientView } from 'src/sections/iIngredient';
+import { DetailHotPotView } from 'src/sections/detail-hotpot/view';
 
 // ----------------------------------------------------------------------
 
-export default function IngredientPage() {
+export default function DetailHotPotPage() {
   return (
     <>
       <Helmet>
-        <title> Ingredients </title>
+        <title> Detail HotPot </title>
       </Helmet>
 
-      <IngredientView />
+      <DetailHotPotView />
     </>
   );
 }
