@@ -48,6 +48,8 @@ export default function DetailOrderView() {
       navigate(`/detail-hotpot?id=${item.id}`);
     } else if (item.type === 'Utensil') {
       navigate(`/detail-utensil?id=${item.id}`);
+    } else if (item.type === 'Pot') {
+      navigate(`/detail-pot?id=${item.id}`);
     } else {
       console.error('Unknown item type:', item.type);
     }
@@ -65,7 +67,7 @@ export default function DetailOrderView() {
         {orderDetail ? (
           <div>
             <Typography variant="h4" sx={{ mb: 5 }}>
-              Order ID: {orderDetail.id}
+              Order ID: {id}
             </Typography>
             <Typography variant="h6">Purchase Date: {new Date(orderDetail.purchaseDate).toLocaleString()}</Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
@@ -81,7 +83,7 @@ export default function DetailOrderView() {
               Payment: {orderDetail.payment}
             </Typography>
             <Typography variant="body1" sx={{ mt: 2 }}>
-              Payment Status: {orderDetail.paymentStatus}
+              Status: {orderDetail.orderStatus}
             </Typography>
             <Typography variant="h6" sx={{ mt: 2 }}>
               Items:

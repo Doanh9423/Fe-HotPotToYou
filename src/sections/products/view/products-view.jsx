@@ -9,10 +9,9 @@ import Typography from '@mui/material/Typography';
 import useFetchData from 'src/hooks/useFetch';
 
 import axiosClient from 'src/api/axiosClient';
+import { useAppStore, useAuthStore } from 'src/stores';
 
 import ProductCard from '../product-card';
-import { useAppStore } from '../../../stores';
-import ProductCartWidget from '../product-cart-widget';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +23,9 @@ export default function ProductsView() {
   const [loading, setLoading] = useState(false);
   const [createForm] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query') ? searchParams.get('query') : '');
+  const { user } = useAuthStore((state) => state.auth);
+  const isStaff = user?.role === 'staff';
+
   function debounce(func, delay) {
     let timeoutId;
 
@@ -224,9 +226,11 @@ export default function ProductsView() {
               </Select.Option>
             ))}
           </Select> */}
-            <Button type="primary" size="large" onClick={() => setOpenModal(true)}>
-              Thêm lẩu
-            </Button>
+            {!isStaff && (
+              <Button type="primary" size="large" onClick={() => setOpenModal(true)}>
+                Thêm lẩu
+              </Button>
+            )}
           </Flex>
         </Flex>
         <List
@@ -263,8 +267,6 @@ export default function ProductsView() {
           </Grid>
         ))}
       </Grid> */}
-
-        <ProductCartWidget />
       </Container>
     </ConfigProvider>
   );

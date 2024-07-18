@@ -12,11 +12,9 @@ import IconButton from '@mui/material/IconButton';
 import useFetchData from 'src/hooks/useFetch';
 
 import axiosClient from 'src/api/axiosClient';
+import { useAppStore, useAuthStore } from 'src/stores';
 
 import Iconify from 'src/components/iconify';
-
-import { useAppStore } from '../../../stores';
-import ProductCartWidget from '../utensil-cart-widget';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +30,9 @@ export default function UtensilView() {
   const [createForm] = Form.useForm();
   const [updateForm] = Form.useForm();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('query') ? searchParams.get('query') : '');
+  const { user } = useAuthStore((state) => state.auth);
+  const isStaff = user?.role === 'staff';
+
   function debounce(func, delay) {
     let timeoutId;
 
@@ -166,90 +167,92 @@ export default function UtensilView() {
       dataIndex: 'price',
       key: 'price',
     },
-    {
-      title: '',
-      align: 'center',
-      width: 80,
-      render: (_, record) => (
-        <>
-          <IconButton onClick={(event) => handleOpenMenu(event, record.id, record)}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+    !isStaff
+      ? {
+          title: '',
+          align: 'center',
+          width: 80,
+          render: (_, record) => (
+            <>
+              <IconButton onClick={(event) => handleOpenMenu(event, record.id, record)}>
+                <Iconify icon="eva:more-vertical-fill" />
+              </IconButton>
 
-          <Popover
-            open={!!open}
-            anchorEl={open}
-            onClose={handleCloseMenu}
-            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            PaperProps={{
-              sx: { width: 140 },
-            }}
-          >
-            <MenuItem
-              onClick={() => {
-                setOpenUpdate(rowId);
-                handleCloseMenu();
-              }}
-            >
-              <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-              Edit
-            </MenuItem>
+              <Popover
+                open={!!open}
+                anchorEl={open}
+                onClose={handleCloseMenu}
+                anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                PaperProps={{
+                  sx: { width: 140 },
+                }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    setOpenUpdate(rowId);
+                    handleCloseMenu();
+                  }}
+                >
+                  <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
+                  Edit
+                </MenuItem>
 
-            <MenuItem onClick={() => handleDelete(rowId)} sx={{ color: 'error.main' }}>
-              <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-              Delete
-            </MenuItem>
-          </Popover>
+                <MenuItem onClick={() => handleDelete(rowId)} sx={{ color: 'error.main' }}>
+                  <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+                  Delete
+                </MenuItem>
+              </Popover>
 
-          <Modal
-            title="Edit Utensils"
-            open={openUpdate === record.id}
-            onOk={() => setOpenUpdate(null)}
-            onCancel={() => setOpenUpdate(null)}
-            width={1000}
-            style={{ top: 20 }}
-            footer={null}
-          >
-            <Form
-              form={updateForm}
-              layout="vertical"
-              onFinish={handleUpdate}
-              onFinishFailed={OnFinishFailed}
-              autoComplete="off"
-              initialValues={{ ...updateRecord, id: rowId }}
-            >
-              <Form.Item label="Name" name="name">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Material" name="material">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Size" name="size">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Quantity" name="quantity">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Price" name="price">
-                <Input />
-              </Form.Item>
+              <Modal
+                title="Edit Utensils"
+                open={openUpdate === record.id}
+                onOk={() => setOpenUpdate(null)}
+                onCancel={() => setOpenUpdate(null)}
+                width={1000}
+                style={{ top: 20 }}
+                footer={null}
+              >
+                <Form
+                  form={updateForm}
+                  layout="vertical"
+                  onFinish={handleUpdate}
+                  onFinishFailed={OnFinishFailed}
+                  autoComplete="off"
+                  initialValues={{ ...updateRecord, id: rowId }}
+                >
+                  <Form.Item label="Name" name="name">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label="Material" name="material">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label="Size" name="size">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label="Quantity" name="quantity">
+                    <Input />
+                  </Form.Item>
+                  <Form.Item label="Price" name="price">
+                    <Input />
+                  </Form.Item>
 
-              <Form.Item style={{ marginBottom: 0 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <Button loading={loading} type="primary" htmlType="submit">
-                    Edit
-                  </Button>
-                  <Form.Item name="type" style={{ flex: 1 }} />
-                  <Form.Item name="id" style={{ flex: 1 }} />
-                </div>
-              </Form.Item>
-            </Form>
-          </Modal>
-        </>
-      ),
-    },
-  ];
+                  <Form.Item style={{ marginBottom: 0 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Button loading={loading} type="primary" htmlType="submit">
+                        Edit
+                      </Button>
+                      <Form.Item name="type" style={{ flex: 1 }} />
+                      <Form.Item name="id" style={{ flex: 1 }} />
+                    </div>
+                  </Form.Item>
+                </Form>
+              </Modal>
+            </>
+          ),
+        }
+      : null,
+  ].filter(Boolean);
 
   return (
     <ConfigProvider
@@ -310,9 +313,11 @@ export default function UtensilView() {
                 handleSearch(e.target.value);
               }}
             />
-            <Button type="primary" size="large" onClick={() => setOpenCreate(true)}>
-              Add Utensils
-            </Button>
+            {!isStaff && (
+              <Button type="primary" size="large" onClick={() => setOpenCreate(true)}>
+                Add Utensils
+              </Button>
+            )}
           </Flex>
         </Flex>
         <Table
@@ -320,7 +325,7 @@ export default function UtensilView() {
             current: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
             position: ['bottomLeft'],
             pageSize: searchParams.get('size') ? Number(searchParams.get('size')) : 10,
-            total: 11,
+            total: 11, // list.length
             showSizeChanger: true,
           }}
           columns={columns_courses}
@@ -337,7 +342,6 @@ export default function UtensilView() {
             setSearchParams(queryParams.toString());
           }}
         />
-        <ProductCartWidget />
       </Container>
     </ConfigProvider>
   );

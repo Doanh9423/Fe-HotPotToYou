@@ -13,8 +13,8 @@ import useFetchData from 'src/hooks/useFetch';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import { useAppStore } from 'src/stores';
 import axiosClient from 'src/api/axiosClient';
+import { useAppStore, useAuthStore } from 'src/stores';
 
 import Label from 'src/components/label';
 
@@ -29,6 +29,8 @@ export default function ShopProductCard({ product }) {
   const [openModal, setOpenModal] = useState(false);
 
   const [createForm] = Form.useForm();
+  const { user } = useAuthStore((state) => state.auth);
+  const isStaff = user?.role === 'staff';
 
   const handleDelete = async () => {
     try {
@@ -192,12 +194,16 @@ export default function ShopProductCard({ product }) {
           <Typography variant="subtitle1">{product.size}</Typography>
           {renderPrice}
         </Stack>
-        <Button type="primary" onClick={() => setOpenModal(true)}>
-          Xem
-        </Button>
-        <Button danger type="primary" onClick={() => handleDelete()}>
-          Xóa
-        </Button>
+        {!isStaff && (
+          <>
+            <Button type="primary" onClick={() => setOpenModal(true)}>
+              Xem
+            </Button>
+            <Button danger type="primary" onClick={() => handleDelete()}>
+              Xóa
+            </Button>
+          </>
+        )}
       </Stack>
     </Card>
   );

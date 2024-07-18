@@ -49,22 +49,22 @@ export const navConfigStaff = [
     icon: icon('ic_cart'),
     children: [
       {
-        title: 'Pending orders',
+        title: 'Pending',
         path: '/order-pending',
         icon: icon('ic_cart'),
       },
       {
-        title: 'In Process orders',
+        title: 'In Process',
         path: '/order-in-process',
         icon: icon('ic_cart'),
       },
       {
-        title: 'Delivered orders',
+        title: 'Delivered',
         path: '/order-delivered',
         icon: icon('ic_cart'),
       },
       {
-        title: 'Canceled orders',
+        title: 'Canceled',
         path: '/order-canceled',
         icon: icon('ic_cart'),
       },
