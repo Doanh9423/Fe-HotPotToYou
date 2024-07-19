@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
-import { Flex, Form, Input, Modal, Table, Button, ConfigProvider, Typography as TypographyAnt } from 'antd';
+import { Flex, Form, Input, Modal, Table, Image, Upload, Button, message, ConfigProvider, Typography as TypographyAnt } from 'antd';
 
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
@@ -73,7 +73,57 @@ export default function PotView() {
     searchParams.get('query')
   );
   const list = responseCourses?.value ? responseCourses.value : [];
-  console.log(list);
+
+  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl1, setImageUrl1] = useState(null);
+  const props = {
+    name: 'file',
+    accept: 'image/*',
+    beforeUpload: (file) => {
+      const isImage = file.type.startsWith('image/');
+      if (!isImage) {
+        message.error('You can only upload image files!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('Image must be smaller than 2MB!');
+      }
+      return false;
+    },
+    onChange: (info) => {
+      getBase64(info.file.originFileObj ? info.file.originFileObj : info.file, (url) => {
+        console.log(url);
+        setImageUrl(url);
+      });
+    },
+  };
+  const props1 = {
+    name: 'file',
+    accept: 'image/*',
+    beforeUpload: (file) => {
+      const isImage = file.type.startsWith('image/');
+      if (!isImage) {
+        message.error('You can only upload image files!');
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2;
+      if (!isLt2M) {
+        message.error('Image must be smaller than 2MB!');
+      }
+      return false;
+    },
+    onChange: (info) => {
+      getBase64(info.file.originFileObj ? info.file.originFileObj : info.file, (url) => {
+        console.log(url);
+        setImageUrl1(url);
+      });
+    },
+  };
+  const getBase64 = (file, callback) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => callback(reader.result);
+    reader.onerror = (error) => message.error(`Error reading file: ${error}`);
+  };
   const handleOpenFilter = () => {
     setOpenFilter(true);
   };
@@ -83,12 +133,15 @@ export default function PotView() {
   };
   const HandleCreate = async (values) => {
     console.log('Success:', values);
+    values.imageUrl = imageUrl;
     try {
       setLoading(true);
       await axiosClient.post(`/v1/utensil`, values);
       refetchApp();
       createForm.resetFields();
+      alert('Thêm thành công');
     } catch {
+      alert('Thêm thất bại');
       // notification.error({ message: 'Sorry! Something went wrong. App server error' });
     } finally {
       setLoading(false);
@@ -110,6 +163,7 @@ export default function PotView() {
 
   const handleUpdate = async (values) => {
     console.log(values);
+    values.imageUrl = imageUrl1;
     try {
       setLoading(true);
       await axiosClient.put(`/v1/utensil/update`, values);
@@ -141,6 +195,12 @@ export default function PotView() {
   };
 
   const columns_courses = [
+    {
+      title: 'Ảnh',
+      dataIndex: 'imageUrl',
+      key: 'imageUrl',
+      render: (url) => <Image src={url} width={200} />,
+    },
     {
       title: 'Name',
       dataIndex: 'name',
@@ -219,6 +279,11 @@ export default function PotView() {
               autoComplete="off"
               initialValues={{ ...updateRecord, id: rowId }}
             >
+              <Form.Item label="Image" name="imageUrl" rules={[{ required: true, message: 'Please input your imageUrl!' }]}>
+                <Upload {...props1}>
+                  <Button>Click to Upload</Button>
+                </Upload>
+              </Form.Item>
               <Form.Item label="Name" name="name">
                 <Input />
               </Form.Item>
@@ -273,6 +338,11 @@ export default function PotView() {
           footer={null}
         >
           <Form form={createForm} layout="vertical" onFinish={HandleCreate} onFinishFailed={OnFinishFailed} autoComplete="off" initialValues={null}>
+            <Form.Item label="Image" name="imageUrl" rules={[{ required: true, message: 'Please input your imageUrl!' }]}>
+              <Upload {...props}>
+                <Button>Click to Upload</Button>
+              </Upload>
+            </Form.Item>
             <Form.Item label="Name" name="name" rules={[{ required: true, message: 'Please input your username!' }]}>
               <Input />
             </Form.Item>
