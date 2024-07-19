@@ -10,9 +10,9 @@ import userApi from '../../../api/userApi';
 import orderApi from '../../../api/orderApi';
 import hotpotApi from '../../../api/hotpotApi';
 import utensilApi from '../../../api/utensilAPI';
-import AppCurrentVisits from '../app-current-visits';
 import AppWidgetSummary from '../app-widget-summary';
 import AppWebsiteVisits from '../app-website-visits';
+import AppCurrentVisits from '../app-current-visits';
 
 export default function AppView() {
   const [orderCount, setOrderCount] = useState(0);
@@ -24,6 +24,8 @@ export default function AppView() {
   const [userStatistics, setUserStatistics] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  console.log(hotpotCount);
+  console.log(utensilCount);
   useEffect(() => {
     fetchData();
   }, []);
@@ -123,7 +125,7 @@ export default function AppView() {
       value: type.id,
     }));
   };
-
+  console.log(prepareHotpotTypesData);
   const prepareUserStatisticsData = () => {
     const roles = ['admin', 'staff', 'customer'];
 
@@ -169,7 +171,7 @@ export default function AppView() {
           />
         </Grid>
 
-        <Grid xs={12} sm={6} md={3}>
+        {/* <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Total Hotpots"
             total={hotpotCount}
@@ -185,20 +187,20 @@ export default function AppView() {
             color="error"
             icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid xs={12} md={6} lg={8}>
           <AppWebsiteVisits title="Order Statistics" subheader="Orders and Revenue over time" chart={prepareOrderStatisticsData()} />
         </Grid>
 
-        <Grid xs={12} md={6} lg={4}>
+        {/* <Grid xs={12} md={6} lg={4}>
           <AppCurrentVisits
             title="Hotpot Types"
             chart={{
               series: prepareHotpotTypesData(),
             }}
           />
-        </Grid>
+        </Grid> */}
 
         <Grid xs={12} md={6} lg={4}>
           <AppCurrentVisits

@@ -23,11 +23,6 @@ const GUEST_MENU_OPTIONS = [
     icon: 'eva:log-in-fill',
     path: '/login',
   },
-  {
-    label: 'Register',
-    icon: 'eva:person-add-fill',
-    path: '/register',
-  },
 ];
 
 const LOGGED_IN_MENU_OPTIONS = [
